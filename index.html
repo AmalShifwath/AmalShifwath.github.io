@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Community Capital Dashboard</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js"></script>
+    <link rel="stylesheet" href="accordian.css"/>
+    <link rel="stylesheet" href="act.css" />
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<!--     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"></script>
+ -->    
+ <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+     crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+     crossorigin=""></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.js"></script>
+
+        <script type="text/javascript">
+              $(document).ready(function() {
+                $('#regions').multiselect({
+                  enableClickableOptGroups: true,
+                  buttonClass: 'butt',
+                  nonSelectedText: 'Select Regions',
+                  allSelectedText: 'All Regions',
+                  includeSelectAllOption: true,
+                  selectAllText: 'Select All',
+                  // enableFiltering: true,
+                  maxHeight: 200,
+                });
+                });
+    </script>
+    
+  </head>
+  <body>
+
+    <!-- <header class="">
+      <div class="head-main">
+        <nav class="nav-bar" aria-label="Main">
+          <a class="navbar-brand" href="https://asu.edu/">
+            <img class="asu-logo-vertical" src="https://resilience.asu.edu/profiles/openclas/themes/clas1/images/asu-logo-vert.png" alt="Arizona State University">
+            <!-- <img class="asu-logo-horizontal" src="https://resilience.asu.edu/profiles/openclas/themes/clas1/images/asu-logo-horiz.png" alt="Arizona State University"> -->
+          <!-- </a> -->
+        
+          <!-- <a class="navbar-brand2" href="https://resilience.asu.edu/">Knowledge Exchange for Resiliance</a> -->
+
+        <!-- </nav> -->
+      <!-- </div> -->
+    <!-- </header> --> -->
+
+    <div class="tool-header">
+      <div >
+        <h1>
+          <span style="background: #ecf4fb; color: #191919; font-size: 50px; font-weight: bold;">Community Capital Dashboard</span>
+        </h1>
+      </div>    
+    </div>
+
+    <div class="row">
+      <div class="button-container">
+        <button class="butt" id="button1" onclick="mapToggle()">Map</button>
+        <button class="butt" id="button2" onclick="radarToggle()">Radar Chart</button>
+        <!-- <select name="states"> -->
+        <select name="regions" id="regions" multiple="multiple" >
+                  <option name="checkbox" value="Chandler">Chandler</option>
+                  <option name="checkbox" value="Gilbert">Gilbert</option>
+                  <option name="checkbox" value="Glendale">Glendale</option>
+                  <option name="checkbox" value="Peoria">Peoria</option>
+                  <option name="checkbox" value="Tempe">Tempe</option>
+                  <option name="checkbox" value="Scottsdale">Scottsdale</option>
+                  <option name="checkbox" value="Surprise">Surprise</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="indicator-header">
+      <h2 id="selected-indicator">Selected Indicator: None</h2>
+    </div>
+
+
+    <div class="container asf">
+
+      <div class="menu-container" style="display: block;">
+        <!-- <div> -->
+
+          <div class="year">
+            <label>
+              <input type="radio" name="accordion1-option" value="year" onclick="showYearInput()">
+              Year
+            </label>
+          </div>
+          <div class="year">
+            <label>
+              <input type="radio" name="accordion1-option" value="range" onclick="showYearRangeInput()">
+              Year Range
+            </label>
+          </div>
+
+          <div id="year-input-container" style="display: block;">
+            <input type="number" id="year-input" min="2000" max="2023" value="2022">
+            <button class="butt" onclick="applyYear()">Apply</button>
+          </div>
+
+          <div id="year-range-input-container" style="display: none;">
+            <label for="start-year">Start Year:</label><br>
+            <input type="number" id="start-year" name="start-year" min="2000" max="2023" value="2020">
+            <br><br>
+            <label for="end-year">End Year:</label><br>
+            <input type="number" id="end-year" name="end-year" min="1900" max="2099" value="2022">
+            <button class="butt" onclick="applyYearRange()">Apply</button>
+          </div>
+
+        <!-- </div> -->
+    </div>
+
+
+      <!-- add a div to hold the SVG elements -->
+      <div id="svg-container"></div>
+
+      <div class="accordion">
+      <div class="accordion-header" name="">NATURAL</div>
+
+      <div class="accordion-panel">
+
+        <div class="accordion-header-2" style="font-size: 12.5px;">
+          <label>
+            <input type="radio" name="accordionV" value="accordion1" onclick="update(this)">
+            Acres urban green space per 1,000 residents
+          </label>
+        </div>
+
+        <div class="accordion-header-2">
+          <label>
+            <input type="radio" name="accordionV" value="accordion2" onclick="update(this)">
+            Brownfields and Superfund sites
+          </label>
+        </div>
+        
+        <div class="accordion-header-2">
+          <label>
+            <input type="radio" name="accordionV" value="accordion3" onclick="update(this)">
+            Drinking water violations per year
+          </label>
+        </div>
+
+        <div class="accordion-header-2">
+          <label>
+            <input type="radio" name="accordionV" value="accordion4" onclick="update(this)">
+            Poor air quality days per year
+          </label>
+        </div>
+        
+        <div class="accordion-header-2">
+          <label>
+            <input type="radio" name="accordionV" value="accordion5" onclick="update(this)">
+            Properties with recycling services
+          </label>
+        </div>
+        
+        <div class="accordion-header-2" style="font-size: 12.5px;">
+          <label>
+            <input type="radio" name="accordionV" value="accordion6" onclick="update(this)">
+            Microgrids or district energy systems
+          </label>
+        </div>
+        
+        <div class="accordion-header-2">
+          <label>
+            <input type="radio" name="accordionV" value="accordion7" onclick="update(this)">
+            KW produced by renewables
+          </label>
+        </div>
+
+      </div>
+
+
+
+
+
+      <!-- Main - 2 -->
+      <div class="accordion-header">BUILT</div>
+      <div class="accordion-panel">
+
+      <div class="accordion-header-2">
+        <label>
+          <input type="radio" name="accordionV" value="accordion8" onclick="update(this)">
+          Substandard buildings
+        </label>
+      </div>
+      
+      <div class="accordion-header-2" style="font-size: 14px;">
+        <label>
+          <input type="radio" name="accordionV" value="accordion9" onclick="update(this)">
+          LEED-certified (green) buildings by square footage
+        </label>
+      </div>
+      
+      <div class="accordion-header-2">
+        <label>
+          <input type="radio" name="accordionV" value="accordion10" onclick="update(this)">
+          Landscape design regulation
+        </label>
+      </div>
+      
+      <div class="accordion-header-2"> 
+        <label>
+          <input type="radio" name="accordionV" value="accordion11" onclick="update(this)">
+          Blue/green infrastructure area
+        </label>
+      </div>
+      
+      <div class="accordion-header-2">
+        <label>
+          <input type="radio" name="accordionV" value="accordion12" onclick="update(this)">
+          Transit availability
+        </label>
+      </div>
+
+      <div class="accordion-header-2">
+        <label>
+          <input type="radio" name="accordionV" value="accordion13" onclick="update(this)">
+          Miles bicycle lanes
+        </label>
+      </div>
+      
+      <div class="accordion-header-2">
+        <label>
+          <input type="radio" name="accordionV" value="accordion14" onclick="update(this)">
+          Miles pedestrian travelways
+        </label>
+      </div>
+      
+
+    </div>
+
+
+
+
+    <!-- Main 3 -->
+    <div class="accordion-header">ORGANIZATIONAL</div>
+      <div class="accordion-panel">
+
+        <div class="accordion-header-2">
+          <label>
+            <input type="radio" name="accordionV" value="accordion15" onclick="update(this)">
+            Municipal financial rating
+          </label>
+        </div>
+
+        <div class="accordion-header-2" style="font-size: 14px;">
+          <label>
+            <input type="radio" name="accordionV" value="accordion16" onclick="update(this)">
+            Residents satisfied with municipal services (survey)
+          </label>
+        </div>
+
+        <div class="accordion-header-2" style="font-size: 14px;">
+          <label>
+            <input type="radio" name="accordionV" value="accordion17" onclick="update(this)">
+            Non-profit organizations per 10,000 residents
+          </label>
+        </div>
+      
+        <div class="accordion-header-2">
+          <label>
+            <input type="radio" name="accordionV" value="accordion18" onclick="update(this)">
+            Full-service grocery stores per 10,000 residents
+          </label>
+        </div>
+      
+        <div class="accordion-header-2">
+          <label>
+            <input type="radio" name="accordionV" value="accordion19" onclick="update(this)">
+            Civic organizations per 10,000 residents
+          </label>
+        </div>
+      
+    </div>
+
+
+
+
+
+      </div>
+    </div>
+
+      <footer style = "display: flex; flex-direction: column; height: 400px;  margin-top: 50px;">
+      <!--   Something ... -->
+      
+        <div style="background-color: #1e1e1d; height: 40%; display: flex; flex-direction: row;">
+<!--           
+          <div style="width: 45%;">
+            <a href="https://resilience.asu.edu/" >
+              <img src="https://resilience.asu.edu/sites/default/files/ker_logo-footer.png" alt="ASU LOGO" class="asu-logo" style="height: 100px; margin-top: 50px; margin-left: 25px;">
+            </a>
+          </div>
+
+          <div style="width: 60%; justify-content: center; align-items: center; align-items: center; margin-top: 50px;">
+            <a href="https://resilience.asu.edu/dashboards-and-tools" style="color:#ffffff; font-size: 20px; text-align: center;">
+              "Discover the power of our data tools and dashboards by clicking here for more information."
+            </a>
+          </div>
+           -->
+        </div>
+          
+        <div style="background-color: #ecf4fb; height: 60%;"> 
+          <!-- <a class="img-link" href="https://www.asu.edu/rankings">
+            <img src="https://resilience.asu.edu/profiles/openclas/modules/custom/clas_header/images/200420-GlobalFooter-No1InnovationLockup.png" alt="Number one in the U.S. for innovation.
+            #1 ASU, #2 Stanford, #3 MIT.
+            - U.S. News and World Report, 5 years, 2016-2020">
+          </a>   -->
+        </div>
+
+      </footer>
+
+    <script src="javascript/main.js"></script>
+  </body>
+</html>
+
+
