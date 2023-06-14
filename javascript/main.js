@@ -479,7 +479,7 @@ function cityChanged(finaldata){
 				}, {});
 
 
-const values = Object.values(resultf);
+				const values = Object.values(resultf);
 			const minVal = Math.min(...values);
 			const maxVal = Math.max(...values);
 			
