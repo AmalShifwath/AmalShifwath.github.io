@@ -479,53 +479,63 @@ function cityChanged(finaldata){
 				}, {});
 
 
-
-				
-				const minColor = [255, 255, 0]; // Yellow
-				const maxColor = [128, 0, 0]; // Maroon
-				
-				const values = Object.values(resultf);
-				const minVal = Math.min(...values);
-				const maxVal = Math.max(...values);
-				
-				const circleLayer = L.layerGroup(); // Create a layer group for the circles
-				
-				for (let i = 0; i < cityData.length; i++) {
-				  const cityObject = cities.find(city => city.city === cityData[i]);
-				  const cityLat = cityObject.lat;
-				  const cityLon = cityObject.lon;
-				
-				  const value = resultf[cityData[i]];
-				  const normalizedValue = (value - minVal) / (maxVal - minVal);
-				  const color = interpolateColor(minColor, maxColor, normalizedValue);
-				
-				  var circle = L.circleMarker([cityLat, cityLon], {
-					radius: 10,
-					fillColor: color,
-					fillOpacity: 1,
-					stroke: false
-				  });
-				
-				  circle.on('mouseover', function (e) {
-					const popupHtml = `<h3><b>${cityData[i]}</b></h3><br><h3>Value: ${value}</h3>`;
-					this.bindPopup(popupHtml).openPopup();
-				  });
-				
-				  circle.on('mouseout', function (e) {
-					this.closePopup();
-				  });
-				
-				  circleLayer.addLayer(circle); // Add the circle to the layer group
-				}
-				
-				circleLayer.addTo(map); // Add the layer group to the map
-				
-				function interpolateColor(color1, color2, value) {
-				  const r = Math.round(color1[0] + (color2[0] - color1[0]) * value);
-				  const g = Math.round(color1[1] + (color2[1] - color1[1]) * value);
-				  const b = Math.round(color1[2] + (color2[2] - color1[2]) * value);
-				  return `rgb(${r}, ${g}, ${b})`;
-				}
+const values = Object.values(resultf);
+			const minVal = Math.min(...values);
+			const maxVal = Math.max(...values);
+			
+			// Define the minimum and maximum sizes for the circles
+			const minSize = 20; // Minimum size of the circle
+			const maxSize = 20; // Maximum size of the circle
+			
+			// Calculate the size and color of the circle for each key in the data object
+			const newData = {}; // contains size and color of the circle
+			for (const key in resultf) {
+			  const value = resultf[key];
+			  const size = ((value - minVal) / (maxVal - minVal)) * (maxSize - minSize) + minSize;
+			  const normalizedValue = (value - minVal) / (maxVal - minVal);
+			  const color = interpolateColor([255, 255, 0], [128, 0, 0], normalizedValue);
+			  newData[key] = { size, color };
+			}
+			
+			for (let i = 0; i < cityData.length; i++) {
+			  const cityObject = cities.find(city => city.city === cityData[i]);
+			  const cityLat = cityObject.lat;
+			  const cityLon = cityObject.lon;
+			
+			  const { size, color } = newData[cityData[i]];
+			
+			  var myIcon = L.icon({
+				iconUrl: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(getSvgString(color)),
+				iconSize: [size, size],
+			  });
+			
+			  var marker = L.marker([cityLat, cityLon], { icon: myIcon }).addTo(map);
+			  markers.push(marker);
+			
+			  marker.bindPopup(`<h3><b>${cityData[i]}</b></h3><br><h3>Value: ${resultf[cityData[i]]}</h3>`);
+			
+			  marker.on('mouseover', function (e) {
+				this.openPopup();
+			  });
+			
+			  marker.on('mouseout', function (e) {
+				this.closePopup();
+			  });
+			}
+			
+			function interpolateColor(color1, color2, value) {
+			  const r = Math.round(color1[0] + (color2[0] - color1[0]) * value);
+			  const g = Math.round(color1[1] + (color2[1] - color1[1]) * value);
+			  const b = Math.round(color1[2] + (color2[2] - color1[2]) * value);
+			  return `rgb(${r}, ${g}, ${b})`;
+			}
+			
+			function getSvgString(color) {
+			  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+				<circle cx="50" cy="50" r="50" fill="${color}" />
+			  </svg>`;
+			}
+						
 				
 				// const values = Object.values(resultf);
 				// const minVal = Math.min(...values);
