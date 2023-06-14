@@ -43,28 +43,26 @@ function drawMapChart(){
 
   // create a new SVG element to serve as the map container for Leaflet
   var leafletMap = mapContainer.append("foreignObject")
-    // .attr("id", "leaflet-map")
     .attr("width", "100%")
     .attr("height", "100%")
-    .append("xhtml:div")
     .attr("id", "map")
     .style("width", "100%")
     .style("height", "100%");
 
-  // initialize Leaflet map with the "leaflet-map" element as the container
+  // initialize Leaflet map with the "map" element as the scontainer
   map = L.map('map').setView([33.4484, -112.0740], 10); // Default Phoenix
   
 	//very good
-// 	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-//     maxZoom: 19,
-//     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-// }).addTo(map);
+	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	}).addTo(map);
 
 	// good
-	L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-	  maxZoom: 13,
-	  attribution: '&copy; <a href="https://carto.com/">Carto</a>'
-	}).addTo(map);
+	// L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	//   maxZoom: 13,
+	//   attribution: '&copy; <a href="https://carto.com/">Carto</a>'
+	// }).addTo(map);
 	
 }
 
@@ -441,11 +439,10 @@ var markers = []; // Create an empty array to store the markers
 
 function cityChanged(finaldata){
 
-
 	// Remove all the existing markers from the map
-	for (var i = 0; i < markers.length; i++) {
-		map.removeLayer(markers[i]);
-	}
+	// for (var i = 0; i < markers.length; i++) {
+	// 	map.removeLayer(markers[i]);
+	// }
 	markers = []; // Clear the markers array
 
 	// Mapping of city with the value of the indicator
@@ -463,23 +460,24 @@ function cityChanged(finaldata){
 	} else {
 
 			// Reducing the data of the selected cities into the cityData variable in a desirable format.
-				const cityData = [];
-				for (let i = 0; i < regions.length; i++) {
-				  const region = regions[i];
-				  const city = cities.find(c => c.city === region);
-				  cityData.push(city.city);
-				}
+			const cityData = [];
+			for (let i = 0; i < regions.length; i++) {
+			  const region = regions[i];
+			  const city = cities.find(c => c.city === region);
+			  cityData.push(city.city);
+			}
 
 
-				resultf = cityData.reduce((obj, key) => {
-				  if (result.hasOwnProperty(key)) {
-				    obj[key] = result[key];
+			resultf = cityData.reduce((obj, key) => {
+			  if (result.hasOwnProperty(key)) {
+			    obj[key] = result[key];
 				  }
-				  return obj;
-				}, {});
+			  return obj;
+			}, {});
 
 
-				const values = Object.values(resultf);
+
+			const values = Object.values(resultf);
 			const minVal = Math.min(...values);
 			const maxVal = Math.max(...values);
 			
@@ -536,6 +534,8 @@ function cityChanged(finaldata){
 			  </svg>`;
 			}
 						
+
+
 				
 				// const values = Object.values(resultf);
 				// const minVal = Math.min(...values);
