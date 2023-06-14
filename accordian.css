@@ -1,0 +1,130 @@
+.accordion-header{
+  background-color: #edf4fb;
+  border-radius: 10px;
+  margin: 2px;
+  padding: 10px;
+  cursor: pointer;
+  color: #000000ba;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 150px;
+  box-sizing: border-box;
+}
+
+.accordion-header.active{
+  background-color: #000000ba;
+  border-radius: 10px;
+  margin: 2px;
+  padding: 10px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 150px;
+  box-sizing: border-box;
+}
+
+.accordion-header::after {
+  content: "\002B";
+  font-size: 20px;
+  color:  rgb(170, 0, 0);
+  font-weight: bold; 
+  font-size: larger;
+  margin-right: 5px;
+  order: 2;
+}
+
+.accordion-header.active::after {
+  content: "\2212";
+  font-size: 20px;
+  color:  rgb(170, 0, 0);
+  font-weight: bold; 
+  font-size: larger;
+  margin-right: 5px;
+  order: 2;
+}
+
+.accordion-header-2 label {
+  text-transform: uppercase;
+}
+
+.accordion-header-2{
+  background-color: #edf4fb; 
+  border-radius: 10px;
+  margin: 2px;
+  cursor: pointer;
+  padding: 10px;
+  color: #000000ba;
+  font-weight: bold;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
+  box-sizing: border-box;
+}
+
+.accordion-header-2.active{
+  background-color: #000000ba;
+  border-radius: 9px;
+  margin: 2px;
+  padding: 7px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 15px;
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
+  box-sizing: border-box;
+}
+
+.asf {
+  display: flex;
+  margin-right: 1000px;
+  justify-content: center;
+  /* align-items: center; */
+}
+
+.accordion-panel {
+  display: none;
+  overflow:visible;
+  transition: height 0.3s ease;
+  position: 100%;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.menu-container {
+  display: none;
+  overflow:visible;
+  transition: height 0.3s ease;
+  position: 100%;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.year label{
+  width: 100%;
+  height: 100%;
+}
+.accordion {
+
+  flex: 1;
+  margin-left: 20px;
+  margin-top: 20px ;
+  border: 2px;
+  /*background-color:  yellow;*/
+}
+
+.active .accordion-panel {
+  display: block;
+  height: auto;
+}
+
