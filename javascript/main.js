@@ -59,7 +59,7 @@ function drawMapChart(){
 	// }).addTo(map);
 
 	// good
-	L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertile/voyager/{z}/{x}/{y}{r}.png', {
 	  maxZoom: 13,
 	  attribution: '&copy; <a href="https://carto.com/">Carto</a>'
 	}).addTo(map);
@@ -482,8 +482,8 @@ function cityChanged(finaldata){
 			const maxVal = Math.max(...values);
 			
 			// Define the minimum and maximum sizes for the circles
-			const minSize = 20; // Minimum size of the circle
-			const maxSize = 20; // Maximum size of the circle
+			const minSize = 30; // Minimum size of the circle
+			const maxSize = 30; // Maximum size of the circle
 			
 			// Calculate the size and color of the circle for each key in the data object
 			const newData = {}; // contains size and color of the circle
@@ -530,7 +530,7 @@ function cityChanged(finaldata){
 			
 			function getSvgString(color) {
 			  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-				<circle cx="50" cy="50" r="50" fill="${color}" />
+				<circle cx="50" cy="50" r="50" fill="${color}" opacity="0.7"/>
 			  </svg>`;
 			}
 						
