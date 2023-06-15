@@ -504,14 +504,14 @@ function cityChanged(finaldata){
 			
 			  var myIcon = L.icon({
 				iconUrl: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(getSvgString(color)),
-				iconSize: [20, 20],
+				iconSize: [30, 30],
 				
 			  });
 			
 			  var marker = L.marker([cityLat, cityLon], { icon: myIcon }).addTo(map);
 			  markers.push(marker);
 			
-			  marker.bindPopup(`<h3><b>${cityData[i]}</b></h3><br><h3>Value: ${resultf[cityData[i]]}</h3>`);
+			  marker.bindPopup(`<h4>${cityData[i]}</h4><h4>Value: ${resultf[cityData[i]]}</h4>`);
 			
 			  marker.on('mouseover', function (e) {
 				this.openPopup();
