@@ -59,10 +59,10 @@ function drawMapChart(){
 	}).addTo(map);
 
 	// good
-	L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertile/voyager/{z}/{x}/{y}{r}.png', {
-	  maxZoom: 13,
-	  attribution: '&copy; <a href="https://carto.com/">Carto</a>'
-	}).addTo(map);
+	// L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertile/voyager/{z}/{x}/{y}{r}.png', {
+	//   maxZoom: 13,
+	//   attribution: '&copy; <a href="https://carto.com/">Carto</a>'
+	// }).addTo(map);
 	
 }
 
@@ -531,7 +531,7 @@ function cityChanged(finaldata){
 			
 			function getSvgString(color) {
 			  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-				<circle cx="50" cy="50" r="50" fill="${color}" />
+				<circle cx="50" cy="50" r="50" fill="${color}" opacity="0.7"/>
 			  </svg>`;
 			}
 						
