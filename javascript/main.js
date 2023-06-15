@@ -53,16 +53,16 @@ function drawMapChart(){
   map = L.map('map').setView([33.4484, -112.0740], 10); // Default Phoenix
   
 	//very good
-	L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
+	// L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    // maxZoom: 19,
+    // attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	// }).addTo(map);
 
 	// good
-	// L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-	//   maxZoom: 13,
-	//   attribution: '&copy; <a href="https://carto.com/">Carto</a>'
-	// }).addTo(map);
+	L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+	  maxZoom: 13,
+	  attribution: '&copy; <a href="https://carto.com/">Carto</a>'
+	}).addTo(map);
 	
 }
 
@@ -440,9 +440,9 @@ var markers = []; // Create an empty array to store the markers
 function cityChanged(finaldata){
 
 	// Remove all the existing markers from the map
-	// for (var i = 0; i < markers.length; i++) {
-	// 	map.removeLayer(markers[i]);
-	// }
+	for (var i = 0; i < markers.length; i++) {
+		map.removeLayer(markers[i]);
+	}
 	markers = []; // Clear the markers array
 
 	// Mapping of city with the value of the indicator
@@ -504,7 +504,8 @@ function cityChanged(finaldata){
 			
 			  var myIcon = L.icon({
 				iconUrl: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(getSvgString(color)),
-				iconSize: [size, size],
+				iconSize: [20, 20],
+				
 			  });
 			
 			  var marker = L.marker([cityLat, cityLon], { icon: myIcon }).addTo(map);
@@ -530,7 +531,7 @@ function cityChanged(finaldata){
 			
 			function getSvgString(color) {
 			  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-				<circle cx="50" cy="50" r="50" fill="${color}" />
+				<circle cx="50" cy="50" r="50" fill="${color}" opacity="0.7" />
 			  </svg>`;
 			}
 						
